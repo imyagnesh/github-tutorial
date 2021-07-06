@@ -2,4 +2,5 @@ file2.txt
 
 updated file 2.txt
 
-updated file2 to check difftool
+file 2 is updated
+
