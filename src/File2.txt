@@ -4,3 +4,7 @@ file 2 is updated
 
 check the changes after config change
 
+learn restore command
+
+some other changes
+
