@@ -1,7 +1,0 @@
-git init -> initialize git repository
-
-git add -> put code in staging area
-
-git commit -> put code on the local server
-
-changes made for file5
