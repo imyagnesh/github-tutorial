@@ -7,3 +7,5 @@ making changes to learn merging
 again make chage for merging
 
 git switch -C tut/merge
+
+learn merge tutorial
