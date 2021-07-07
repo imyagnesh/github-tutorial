@@ -27,3 +27,13 @@ git diff HEAD~2 HEAD~1 --name-only
 
 git diff HEAD~2 HEAD~1 --name-status
 
+git bisect start
+
+git bisect bad
+
+bit bisect good [commitid]
+
+it will move your HEAD to middle
+
+git bisect good/bad
+
