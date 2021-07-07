@@ -6,4 +6,24 @@ changes made for restore functinality
 
 // git log --oneline --stat
 // git log --oneline --path
-// git log --oneline -2
+// git log --oneline -3
+// git log --oneline --after "one week ago"
+// git log --oneline --after "yesterday"
+// git log --oneline --after "today"
+// git log --oneline --before "2021-07-07"
+// git log --oneline --grap="commit message content"
+// git log --oneline -S"any content from the file"
+
+// git log --oneline --patch src/File1.txt
+
+git diff -> it will show diff for unstatged changes
+git diff --staged  -> it will show diff of staged changes
+
+git diff HEAD~[number] [filepath] -> it will show me the diff of HEAD~[Number] and current one for filename 
+
+git diff HEAD~2 HEAD~1
+
+git diff HEAD~2 HEAD~1 --name-only
+
+git diff HEAD~2 HEAD~1 --name-status
+
