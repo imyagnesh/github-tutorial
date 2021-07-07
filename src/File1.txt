@@ -3,3 +3,7 @@ File1.txt
 updated file1.txt
 
 changes made for restore functinality
+
+// git log --oneline --stat
+// git log --oneline --path
+// git log --oneline -2
