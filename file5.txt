@@ -11,3 +11,5 @@ git switch -C tut/merge
 learn merge tutorial
 
 merge tuturial
+
+change in file5
