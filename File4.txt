@@ -1,7 +1,0 @@
-git mv filename pathname
-
-git rm filename
-
-changes made in file 4 for squash commit
-
-commit changes for reabse tutorial
