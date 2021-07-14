@@ -1,6 +1,6 @@
 let todoList = [];
 
-const addListToUl = (todoListItem) => {
+const addOrDeleteListToUl = (todoListItem) => {
   const ul = document.querySelector("#todoList > ul");
   const listItem = `<li id="${todoListItem.id}">
     <input type="checkbox" ${
@@ -9,7 +9,7 @@ const addListToUl = (todoListItem) => {
     <span style="text-decoration: ${
       todoListItem.isDone ? "line-through" : "none"
     }">${todoListItem.todoText}</span>
-    <button type="button">Delete Todo</button>
+    <button type="button" id="delete" onclick="deleteTodo(${todoListItem.id})">Delete Todo</button>
   </li>`;
 
   ul.insertAdjacentHTML("afterbegin", listItem);
@@ -49,6 +49,19 @@ const completeTodo = (id) => {
   clearUl();
   for (let i = 0; i < updatedTodoList.length; i++) {
     addListToUl(updatedTodoList[i]);
+  }
+};
+
+const deleteTodo = (id) => {
+  const index = todoList.findIndex((x) => x.id === id);
+  const deletedTodoList = [
+    ...todoList.slice(0, index),
+    ...todoList.slice(index + 1),
+  ];
+  todoList = deletedTodoList;
+  clearUl();
+  for (let i = 0; i < deletedTodoList.length; i++) {
+    addListToUl(deletedTodoList[i]);
   }
 };
 
