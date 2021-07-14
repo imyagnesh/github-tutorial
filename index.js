@@ -9,8 +9,10 @@ const addListToUl = (todoListItem) => {
     <span style="text-decoration: ${
       todoListItem.isDone ? "line-through" : "none"
     }">${todoListItem.todoText}</span>
-    <button type="button">Delete Todo</button>
+     <button type="button" onclick="deleteTodo(${todoListItem.id})">Delete Todo</button>
   </li>`;
+
+  
 
   ul.insertAdjacentHTML("afterbegin", listItem);
 };
@@ -51,6 +53,22 @@ const completeTodo = (id) => {
     addListToUl(updatedTodoList[i]);
   }
 };
+
+const deleteTodo = (id) => {
+  const index = todoList.findIndex((x) => x.id === id);
+  const updatedTodoList = [
+    ...todoList.slice(0, index),
+    ...todoList.slice(index + 1),
+  ];
+  todoList = updatedTodoList;
+  clearUl();
+  for (let i = 0; i < updatedTodoList.length; i++) {
+    addListToUl(updatedTodoList[i]);
+  }
+};
+
+
+
 
 // document.addEventListener("mousemove", () => {
 //   console.log("mousemove");
