@@ -16,86 +16,65 @@ import ReactDOM from "react-dom";
 // error
 
 class App extends Component {
-  headerRef = createRef();
 
-  constructor(props) {
-    super(props);
-    console.log("constructor");
-    //   this.state = {
-    //     count: props.initCounter,
-    //   };
-    console.log("====================================");
-    console.log(document.getElementById("count"));
-    console.log("====================================");
-    // on componenet load if want to log something u can write code here
-  }
+ 
 
   state = {
-    count: 0,
-  };
-
-  static getDerivedStateFromProps(props, state) {
-    console.log("getDerivedStateFromProps");
-    console.log("props", props);
-    console.log("state", state);
-    console.log("====================================");
-    console.log(document.getElementById("count"));
-    console.log("====================================");
-    return {
-      count: state.count === 0 ? props.initCounter : state.count,
-    };
+    seconds :0,
+    minutes :0
   }
 
-  componentDidMount() {
-    // fetch data;
-    this.headerRef.current.style = "background-color:blue";
-    document.addEventListener("copy", () => {
-      console.log("====================================");
-      console.log("copied");
-      console.log("====================================");
+  
+
+  addMins = () =>{
+    this.setState(({minutes}) => ({minutes: minutes + 1}));
+  }
+
+  addSecs = () => {
+    this.setState(({ seconds }) => ({ seconds: seconds + 1 }));
+  };
+
+  constructor(props){
+    super(props);
+    this.timer = 0;
+    this.addSecs = this.addSecs.bind(this);
+    this.addMins = this.addMins.bind(this);
+    this.startTimer = this.startTimer.bind(this);
+    this.countDown = this.countDown.bind(this);
+  }
+
+  startTimer= () => {
+    console.log("started");
+    if (this.timer == 0 && this.state.seconds > 0) {
+      this.timer = setInterval(this.countDown, 1000);
+    }
+  };
+
+  countDown = () => {
+    let seconds = this.state.seconds - 1;
+    this.setState({
+      seconds: seconds,
     });
-  }
-
-  //   constructor(props) {
-  //     super(props);
-  //     this.increase = this.increase.bind(this);
-  //     this.decrease = this.decrease.bind(this);
-  //   }
-
-  clickMe() {
-    console.log("click me");
-  }
-
-  increase = () => {
-    console.log("increase");
-    // this.state.count += 1;
-    this.setState(({ count }) => ({ count: count + 1 }));
+    
+    if (seconds == 0) { //because it goes past 0
+      clearInterval(this.timer);
+    }
   };
-
-  decrease = () => {
-    console.log("decrease");
-    this.setState(({ count }) => ({ count: count - 1 }));
-    // this.state.count -= 1;
-  };
-
+  
   render() {
     console.log("render");
-    const { count } = this.state;
+    const {minutes,seconds} = this.state;
     return (
-      <>
-        <div id="count" ref={this.headerRef}>
-          {count}
+      <div>
+        <div id="nums" ref={this.numRef}>
+          {minutes}:{seconds}
         </div>
-        <button type="button" onClick={this.increase}>
-          +
-        </button>
-        <button type="button" onClick={this.decrease}>
-          -
-        </button>
-        <button type="button" onClick={this.clickMe}>
-          Click Me
-        </button>
-      </>
+        <button onClick={this.addMins}>Add Minutes</button>
+        <button onClick={this.startTimer} >Start</button>
+        <button onClick={this.addSecs} >Add Seconds</button>
+      </div>
+
+    
     );
   }
 }
@@ -105,7 +84,7 @@ class App extends Component {
 // Abstraction
 // Encapsulation
 
-ReactDOM.render(<App initCounter={10} />, document.getElementById("root"));
+ReactDOM.render(<App/>, document.getElementById("root"));
 
 // component
 // 1. component name start with Capital letter
