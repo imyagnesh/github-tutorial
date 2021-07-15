@@ -1,6 +1,13 @@
 {
+<<<<<<< Updated upstream
   "git.ignoreLimitWarning": true,
   "emmet.includeLanguages": {
     "javascript": "javascriptreact"
   }
 }
+=======
+    "emmet.includeLanguages": {
+        "javascript": "javascriptreact"
+      }
+}
+>>>>>>> Stashed changes
