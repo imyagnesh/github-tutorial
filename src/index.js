@@ -1,5 +1,12 @@
+import {
+  ButtonGroup,
+  Button,
+  
+} from "@material-ui/core";
 import React, { Component, createRef } from "react";
 import ReactDOM from "react-dom";
+
+
 // import App from "./app";
 // import "./index.scss";
 
@@ -48,7 +55,7 @@ class App extends Component {
 
   componentDidMount() {
     // fetch data;
-    this.headerRef.current.style = "background-color:blue";
+    // this.headerRef.current.style = "background-color:skyblue"
     document.addEventListener("copy", () => {
       console.log("====================================");
       console.log("copied");
@@ -78,23 +85,32 @@ class App extends Component {
     // this.state.count -= 1;
   };
 
+  reset = () => {
+    console.log("reset");
+    this.setState(({ count }) => ({ count: count = 0 }));
+    // this.state.count = 0;
+  };
+
+  
+
   render() {
     console.log("render");
     const { count } = this.state;
     return (
       <>
-        <div id="count" ref={this.headerRef}>
+        <div style={{backgroundColor:"skyblue", textAlign:"center", borderRadius:"5px", width:"50%",  margin:"auto", marginBottom:10}} id="count" //ref={this.headerRef}
+        >
           {count}
         </div>
-        <button type="button" onClick={this.increase}>
-          +
-        </button>
-        <button type="button" onClick={this.decrease}>
-          -
-        </button>
-        <button type="button" onClick={this.clickMe}>
-          Click Me
-        </button>
+        
+      
+
+  <ButtonGroup style={{ display: "flex", justifyContent: "center" }} size="large" color="primary" aria-label="large outlined primary button group">
+  <Button  type="button" onClick={this.increase}>+</Button>
+  <Button type="button" onClick={this.decrease}>-</Button>
+  <Button type="button" onClick={this.reset}>Reset</Button>
+</ButtonGroup>
+        
       </>
     );
   }
@@ -105,7 +121,7 @@ class App extends Component {
 // Abstraction
 // Encapsulation
 
-ReactDOM.render(<App initCounter={10} />, document.getElementById("root"));
+ReactDOM.render(<App initCounter={0} />, document.getElementById("root"));
 
 // component
 // 1. component name start with Capital letter
