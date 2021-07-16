@@ -17,21 +17,30 @@ import ReactDOM from "react-dom";
 
 class App extends Component {
 
- 
-
   state = {
     seconds :0,
-    minutes :0
+    minutes :0,
+    time: {}
   }
-
-  
 
   addMins = () =>{
     this.setState(({minutes}) => ({minutes: minutes + 1}));
-  }
+    this.setState(prevState => ({
+      time: {                   
+          ...prevState.time,    
+          m: this.state.minutes       
+      }
+  }))
+  };
 
   addSecs = () => {
     this.setState(({ seconds }) => ({ seconds: seconds + 1 }));
+    this.setState(prevState => ({
+      time: {                   
+          ...prevState.time,    
+          s: this.state.seconds     
+      }
+  }))
   };
 
   constructor(props){
@@ -50,9 +59,23 @@ class App extends Component {
     }
   };
 
+  timeToDisplay = (secs) =>{
+    let minutes = Math.floor((secs % (60 * 60)) / 60); //round down
+
+    let secsdivisor = (secs % (60 * 60)) % 60;
+    let seconds = Math.ceil(secsdivisor); //round up
+
+    let obj = {
+      "m": minutes,
+      "s": seconds
+    };
+    return obj;
+  };
+
   countDown = () => {
     let seconds = this.state.seconds - 1;
     this.setState({
+      time: this.timeToDisplay(seconds),
       seconds: seconds,
     });
     
@@ -60,6 +83,11 @@ class App extends Component {
       clearInterval(this.timer);
     }
   };
+
+  componentDidMount() {
+    let timeLeftVar = this.timeToDisplay(this.state.seconds);
+    this.setState({ time: timeLeftVar });
+  }
   
   render() {
     console.log("render");
@@ -67,7 +95,7 @@ class App extends Component {
     return (
       <div>
         <div id="nums" ref={this.numRef}>
-          {minutes}:{seconds}
+          {this.state.time.m}:{this.state.time.s}
         </div>
         <button onClick={this.addMins}>Add Minutes</button>
         <button onClick={this.startTimer} >Start</button>
