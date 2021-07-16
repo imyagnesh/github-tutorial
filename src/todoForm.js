@@ -7,11 +7,11 @@ const CustomButton = styled(Button)`
   margin-left: 20px;
 `;
 
-const TodoForm = () => {
+const TodoForm = ({ addTodo, inputRef }) => {
   return (
-    <form style={{ display: "flex", margin: "0 10px" }}>
-      <TextField id="todoText" label="Todo" fullWidth />
-      <CustomButton variant="contained" color="primary">
+    <form style={{ display: "flex", margin: "0 10px" }} onSubmit={addTodo}>
+      <TextField id="todoText" label="Todo" fullWidth inputRef={inputRef} />
+      <CustomButton variant="contained" color="primary" type="submit">
         Add Todo
       </CustomButton>
     </form>
