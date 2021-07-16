@@ -95,6 +95,10 @@ class App extends Component {
         <button type="button" onClick={this.clickMe}>
           Click Me
         </button>
+        <div>
+          <label for="number">Enter a number</label>
+          <input type="text" id="number"></input>
+        </div>
       </>
     );
   }
