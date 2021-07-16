@@ -10,7 +10,11 @@ import {
 import DeleteIcon from "@material-ui/icons/Delete";
 import React, { memo } from "react";
 
-const TodoList = ({ data, completeTodo, deleteTodo }) => {
+const TodoList = ({ data, completeTodo, deleteTodo, status }) => {
+  if (status === "loading") {
+    return <h1>Loading...</h1>;
+  }
+  
   return (
     <List>
       {data.map((item) => {
@@ -21,6 +25,7 @@ const TodoList = ({ data, completeTodo, deleteTodo }) => {
                 edge="start"
                 checked={item.isDone}
                 onChange={() => completeTodo(item)}
+                disabled={status === "updating"}
               />
             </ListItemIcon>
             <ListItemText
@@ -30,7 +35,11 @@ const TodoList = ({ data, completeTodo, deleteTodo }) => {
               }}
             ></ListItemText>
             <ListItemSecondaryAction>
-              <IconButton edge="end" onClick={() => deleteTodo(item)}>
+              <IconButton
+                edge="end"
+                disabled={status === "deleting"}
+                onClick={() => deleteTodo(item)}
+              >
                 <DeleteIcon />
               </IconButton>
             </ListItemSecondaryAction>

@@ -12,70 +12,118 @@ class App extends PureComponent {
   state = {
     todoList: [],
     filter: "all",
+    status: "idle",
   };
 
-  addTodo = (event) => {
-    event.preventDefault();
-    console.log(this.inputRef.current.value);
-    this.setState(
-      ({ todoList }) => ({
-        todoList: [
-          ...todoList,
-          {
-            id: new Date().valueOf(),
-            text: this.inputRef.current.value,
-            isDone: false,
-          },
-        ],
-        filter: "all",
-      }),
-      () => {
-        this.inputRef.current.value = "";
+  async componentDidMount() {
+    this.loadData();
+  }
+
+  addTodo = async (event) => {
+    try {
+      event.preventDefault();
+      this.setState({ status: "adding" });
+      const res = await fetch("http://localhost:3000/todoList", {
+        method: "POST",
+        body: JSON.stringify({
+          text: this.inputRef.current.value,
+          isDone: false,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+      const json = await res.json();
+
+      console.log(this.inputRef.current.value);
+      this.setState(
+        ({ todoList }) => ({
+          todoList: [...todoList, json],
+          filter: "all",
+          status: "idle",
+        }),
+        () => {
+          this.inputRef.current.value = "";
+        }
+      );
+    } catch (error) {
+      this.setState({ status: "error" });
+    }
+  };
+
+  completeTodo = async (item) => {
+    try {
+      this.setState({ status: "updating" });
+      const res = await fetch(`http://localhost:3000/todoList/${item.id}`, {
+        method: "PUT",
+        body: JSON.stringify({ ...item, isDone: !item.isDone }),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+
+      const json = await res.json();
+
+      const { todoList } = this.state;
+      const index = todoList.findIndex((x) => x.id === item.id);
+      const updatedTodoList = [
+        ...todoList.slice(0, index),
+        json,
+        ...todoList.slice(index + 1),
+      ];
+      this.setState({ todoList: updatedTodoList, status: "idle" });
+    } catch (error) {
+      this.setState({ status: "error" });
+    }
+  };
+
+  deleteTodo = async (item) => {
+    try {
+      this.setState({ status: "deleting" });
+      await fetch(`http://localhost:3000/todoList/${item.id}`, {
+        method: "DELETE",
+      });
+      const { todoList } = this.state;
+      const index = todoList.findIndex((x) => x.id === item.id);
+      const updatedTodoList = [
+        ...todoList.slice(0, index),
+        ...todoList.slice(index + 1),
+      ];
+      this.setState({ todoList: updatedTodoList, status: "idle" });
+    } catch (error) {
+      this.setState({ status: "error" });
+    }
+  };
+
+  loadData = async (filter) => {
+    try {
+      this.setState({ status: "loading" });
+      let query = "";
+      if (filter !== "all") {
+        query = `?isDone=${filter === "completed" ? true : false}`;
       }
-    );
-  };
-
-  completeTodo = (item) => {
-    const { todoList } = this.state;
-    const index = todoList.findIndex((x) => x.id === item.id);
-    const updatedTodoList = [
-      ...todoList.slice(0, index),
-      { ...item, isDone: !item.isDone },
-      ...todoList.slice(index + 1),
-    ];
-    this.setState({ todoList: updatedTodoList });
-  };
-
-  deleteTodo = (item) => {
-    const { todoList } = this.state;
-    const index = todoList.findIndex((x) => x.id === item.id);
-    const updatedTodoList = [
-      ...todoList.slice(0, index),
-      ...todoList.slice(index + 1),
-    ];
-    this.setState({ todoList: updatedTodoList });
-  };
-
-  filter = (filter) => {
-    this.setState({ filter });
-  };
-
-  filterList = () => {
-    const { todoList, filter } = this.state;
-    return todoList.filter((item) => {
-      switch (filter) {
-        case "completed":
-          return item.isDone;
-        case "pending":
-          return !item.isDone;
-        default:
-          return true;
-      }
-    });
+      const res = await fetch(`http://localhost:3000/todoList${query}`);
+      const json = await res.json();
+      this.setState({ filter, todoList: json, status: "idle" });
+    } catch (error) {
+      this.setState({ status: "error" });
+    }
   };
 
   render() {
-    const { filter } = this.state;
+    const { todoList, filter, status } = this.state;
+    if (status === "error") {
+      return (
+        <div>
+          <h1>Something went wrong. Please try after sometime</h1>
+          <button type="button" onClick={this.loadData}>
+            Reload
+          </button>
+        </div>
+      );
+    }
     return (
       <>
         <AppBar position="static">
@@ -86,17 +134,22 @@ class App extends PureComponent {
           </Toolbar>
         </AppBar>
         <main style={{ marginTop: 20, flex: 1 }}>
-          <TodoForm addTodo={this.addTodo} inputRef={this.inputRef} />
+          <TodoForm
+            addTodo={this.addTodo}
+            inputRef={this.inputRef}
+            status={status}
+          />
           <section>
             <TodoList
-              data={this.filterList()}
+              status={status}
+              data={todoList}
               completeTodo={this.completeTodo}
               deleteTodo={this.deleteTodo}
             />
           </section>
         </main>
         <footer>
-          <TodoFilter value={filter} onFilter={this.filter} />
+          <TodoFilter value={filter} onFilter={this.loadData} />
         </footer>
       </>
     );
