@@ -10,13 +10,20 @@ const TodoFilter = ({ value, onFilter }) => {
       textColor="secondary"
       aria-label="icon label tabs example"
     >
-      <Tab label="All" value="all" onClick={() => onFilter("all")} />
       <Tab
+        role="button"
+        label="All Todos"
+        value="all"
+        onClick={() => onFilter("all")}
+      />
+      <Tab
+        role="button"
         label="Pending"
         value="pending"
         onClick={() => onFilter("pending")}
       />
       <Tab
+        role="button"
         label="Completed"
         value="completed"
         onClick={() => onFilter("completed")}
