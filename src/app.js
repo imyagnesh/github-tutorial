@@ -23,7 +23,7 @@ class App extends PureComponent {
     try {
       event.preventDefault();
       this.setState({ status: "adding" });
-      const res = await fetch("http://localhost:3000/todoList", {
+      const res = await fetch("https://ca81928d8566.ngrok.io/todoList", {
         method: "POST",
         body: JSON.stringify({
           text: this.inputRef.current.value,
@@ -55,14 +55,17 @@ class App extends PureComponent {
   completeTodo = async (item) => {
     try {
       this.setState({ status: "updating" });
-      const res = await fetch(`http://localhost:3000/todoList/${item.id}`, {
-        method: "PUT",
-        body: JSON.stringify({ ...item, isDone: !item.isDone }),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
+      const res = await fetch(
+        `https://ca81928d8566.ngrok.io/todoList/${item.id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({ ...item, isDone: !item.isDone }),
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
 
       const json = await res.json();
 
@@ -82,7 +85,7 @@ class App extends PureComponent {
   deleteTodo = async (item) => {
     try {
       this.setState({ status: "deleting" });
-      await fetch(`http://localhost:3000/todoList/${item.id}`, {
+      await fetch(`https://ca81928d8566.ngrok.io/todoList/${item.id}`, {
         method: "DELETE",
       });
       const { todoList } = this.state;
@@ -104,7 +107,7 @@ class App extends PureComponent {
       if (filter !== "all") {
         query = `?isDone=${filter === "completed" ? true : false}`;
       }
-      const res = await fetch(`http://localhost:3000/todoList${query}`);
+      const res = await fetch(`https://ca81928d8566.ngrok.io/todoList${query}`);
       const json = await res.json();
       this.setState({ filter, todoList: json, status: "idle" });
     } catch (error) {
